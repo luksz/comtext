@@ -1,0 +1,9 @@
+# Retrieval eval cases — add real queries from your own usage.
+# Format: query + expected item source_ids (or title substrings for fuzzy matching).
+#
+# Run: uv run pytest evals/ -v
+cases:
+  - query: "example query about your code"
+    expected_titles:
+      - "relevant_file.py"
+    note: "Replace this with a real query once you've ingested files"
