@@ -1,7 +1,7 @@
 [project]
-name = "pce"
+name = "comtext"
 version = "0.1.0"
-description = "Personal Context Engine — local-first retrieval over your files, browser, calendar, and email"
+description = "Comtext — local-first personal context engine for your files, browser, calendar, and email"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

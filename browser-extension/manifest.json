@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "PCE — Personal Context Engine",
+  "name": "Comtext",
   "version": "0.1.0",
   "description": "Captures your browsing context and sends it to your local PCE server.",
 
