@@ -43,6 +43,18 @@ class AskResponse(BaseModel):
     latency_ms: int
 
 
+class TeamRunRequest(BaseModel):
+    task: str
+
+
+class TeamRunResponse(BaseModel):
+    task: str
+    research: str
+    plan: str
+    implementation: str
+    review: str
+
+
 @router.get("/healthz")
 async def healthz():
     return {"status": "ok"}
@@ -129,4 +141,19 @@ async def ask(body: AskRequest, db: AsyncSession = Depends(get_db)):
         sources=[{k: v for k, v in s.items() if k != "chunks"} for s in sources],
         backend=llm_resp.backend,
         latency_ms=llm_resp.latency_ms,
+    )
+
+
+@router.post("/team/run", response_model=TeamRunResponse)
+async def team_run(body: TeamRunRequest, db: AsyncSession = Depends(get_db)):
+    """Run a team of agents on a task. Requires PCE_ANTHROPIC_API_KEY."""
+    from pce.agents.orchestrator import run_team
+
+    result = await run_team(body.task, db)
+    return TeamRunResponse(
+        task=result.task,
+        research=result.research,
+        plan=result.plan,
+        implementation=result.implementation,
+        review=result.review,
     )

@@ -30,6 +30,7 @@ class Source(str, enum.Enum):
     obsidian = "obsidian"
     slack = "slack"
     github = "github"
+    agent = "agent"
 
 
 class Kind(str, enum.Enum):

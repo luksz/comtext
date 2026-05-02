@@ -133,5 +133,43 @@ def ask(
     _run(_ask())
 
 
+@app.command()
+def team(
+    task: str = typer.Argument(..., help="Task for the team to complete"),
+):
+    """Run a team of AI agents (Researcher → Planner → Coder → Reviewer) on a task.
+
+    Requires PCE_ANTHROPIC_API_KEY to be set.
+    """
+    async def _team():
+        from pce.agents.orchestrator import run_team
+        from pce.db.session import get_session_factory
+
+        console.print(f"\n[bold cyan]Team Task:[/bold cyan] {task}\n")
+
+        factory = get_session_factory()
+        async with factory() as session:
+            result = await run_team(task, session)
+
+        role_colors = {
+            "researcher": "blue",
+            "planner": "yellow",
+            "coder": "green",
+            "reviewer": "magenta",
+        }
+        for agent_out in result.agents:
+            color = role_colors.get(agent_out.role, "white")
+            console.rule(
+                f"[bold {color}]{agent_out.role.title()}[/bold {color}]"
+                f"  [dim]{agent_out.tool_calls} tool call(s)[/dim]"
+            )
+            console.print(agent_out.text)
+            console.print()
+
+        console.rule("[bold green]Team report saved to Comtext[/bold green]")
+
+    _run(_team())
+
+
 if __name__ == "__main__":
     app()

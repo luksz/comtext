@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     ollama_model: str = "llama3.2"
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-sonnet-4-6"
+    agent_model: str = "claude-opus-4-7"
 
     # Route to cloud only when local can't handle it
     llm_backend: str = "ollama"   # "ollama" | "anthropic"
