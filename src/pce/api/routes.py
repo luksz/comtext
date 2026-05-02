@@ -25,6 +25,12 @@ class IngestResponse(BaseModel):
     ingested: int
 
 
+class BrowserPageRequest(BaseModel):
+    url: str
+    title: str
+    body: str  # extracted readable text from the page
+
+
 class AskRequest(BaseModel):
     question: str
     top_k: int = 10
@@ -81,6 +87,13 @@ async def embed_pending():
     from pce.ingestion.embedder import embed_pending as _embed
     count = await _embed()
     return {"embedded": count}
+
+
+@router.post("/ingest/browser")
+async def ingest_browser_page(body: BrowserPageRequest, db: AsyncSession = Depends(get_db)):
+    from pce.connectors.browser import ingest_page
+    updated = await ingest_page(body.url, body.title, body.body, db)
+    return {"ingested": updated, "url": body.url}
 
 
 @router.post("/ask", response_model=AskResponse)

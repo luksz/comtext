@@ -68,6 +68,9 @@ async def vector_search(query: str, session: AsyncSession, limit: int = 30) -> l
 
     scores: dict[str, float] = {}
     for item_id, embedding in rows:
+        if isinstance(embedding, str):
+            import json
+            embedding = json.loads(embedding)
         vec = np.array(embedding)
         norm = np.linalg.norm(q_vec) * np.linalg.norm(vec)
         if norm == 0:

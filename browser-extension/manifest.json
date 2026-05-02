@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "PCE — Personal Context Engine",
+  "version": "0.1.0",
+  "description": "Captures your browsing context and sends it to your local PCE server.",
+
+  "permissions": ["tabs", "history", "activeTab", "storage", "scripting"],
+  "host_permissions": ["http://127.0.0.1:8766/*", "<all_urls>"],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PCE"
+  }
+}
