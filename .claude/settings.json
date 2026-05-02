@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(jq -r '.tool_input.command'); echo \"$cmd\" | grep -qE 'rm.*(data/|pce\\.db)' && echo '{\"continue\":false,\"stopReason\":\"Blocked: would delete your indexed context database. Run manually if intentional.\"}' || true",
+            "statusMessage": "Checking for dangerous commands..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); [[ \"$f\" == *.py ]] && .venv/bin/python -m py_compile \"$f\" 2>&1 || true",
+            "statusMessage": "Checking Python syntax..."
+          }
+        ]
+      }
+    ]
+  }
+}
